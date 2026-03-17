@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Attendance Records</title>
+
+<link rel="icon" type="image/png" href="https://skoolapp.com/wp-content/uploads/2018/03/website-attandence-features-page.png">
+
+<style>
+
+body{
+font-family:Arial;
+text-align:center;
+
+/* BACKGROUND IMAGE ADDED */
+background:
+linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+url("https://box-six.com/images/the_classroom-min.jpeg");
+
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+
+min-height:100vh;
+margin:0;
+padding:30px;
+color:#333;
+}
+
+/* MAIN TITLE BOX */
+h2{
+color:white;
+background:rgba(255,255,255,0.15);
+border:2px solid rgba(255,255,255,0.4);
+display:inline-block;
+padding:10px 25px;
+border-radius:10px;
+text-shadow:1px 1px 6px rgba(0,0,0,0.4);
+}
+
+/* BACK BUTTON */
+a{
+text-decoration:none;
+display:inline-block;
+margin-top:15px;
+}
+
+a{
+padding:8px 18px;
+background:linear-gradient(45deg,#00c6ff,#0072ff);
+color:white;
+border-radius:6px;
+font-weight:bold;
+transition:0.3s;
+}
+
+a:hover{
+transform:translateY(-2px);
+box-shadow:0 6px 15px rgba(0,0,0,0.3);
+}
+
+/* SECTION TITLE */
+h3{
+color:white;
+margin-top:30px;
+background:rgba(255,255,255,0.15);
+border:2px solid rgba(255,255,255,0.4);
+display:inline-block;
+padding:6px 18px;
+border-radius:8px;
+text-shadow:1px 1px 4px rgba(0,0,0,0.3);
+}
+
+/* SEARCH FORM */
+form{
+margin:15px;
+}
+
+input{
+padding:8px;
+border-radius:6px;
+border:1px solid #ccc;
+outline:none;
+}
+
+input:focus{
+border-color:#667eea;
+box-shadow:0 0 6px rgba(102,126,234,0.6);
+}
+
+button{
+padding:8px 16px;
+border:none;
+border-radius:6px;
+background:linear-gradient(45deg,#ff9800,#ffb347);
+color:white;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+background:#e68900;
+transform:translateY(-2px);
+box-shadow:0 6px 15px rgba(0,0,0,0.3);
+}
+
+/* TABLE */
+table{
+margin:auto;
+border-collapse:collapse;
+width:70%;
+background:white;
+border-radius:12px;
+overflow:hidden;
+box-shadow:0 10px 25px rgba(0,0,0,0.25);
+}
+
+/* TABLE HEADERS */
+th{
+background:linear-gradient(45deg,#333,#555);
+color:white;
+padding:12px;
+}
+
+/* TABLE CELLS */
+td{
+border:1px solid #ddd;
+padding:10px;
+}
+
+/* ROW HOVER */
+tr:hover{
+background:#f3f3f3;
+}
+
+/* STATUS COLORS */
+td:last-child{
+font-weight:bold;
+}
+
+td:last-child:contains("Present"){
+color:green;
+}
+
+td:last-child:contains("Absent"){
+color:red;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>Attendance Records</h2>
+
+<a href="/dashboard">Back</a>
+
+<h3>Filter by Date</h3>
+
+<form method="GET" action="/view">
+
+<input type="date" name="date">
+
+<button type="submit">Search</button>
+
+</form>
+
+<table>
+
+<tr>
+<th>Roll No</th>
+<th>Name</th>
+<th>Date</th>
+<th>Status</th>
+</tr>
+
+{% for r in records %}
+<tr>
+
+<td>{{r[0]}}</td>
+<td>{{r[1]}}</td>
+<td>{{r[2]}}</td>
+<td>{{r[3]}}</td>
+
+</tr>
+{% endfor %}
+
+</table>
+
+</body>
+</html>

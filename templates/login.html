@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+
+<title>Teacher Login</title>
+
+<link rel="icon" type="image/png" href="https://skoolapp.com/wp-content/uploads/2018/03/website-attandence-features-page.png">
+
+<style>
+
+body{
+font-family:Arial;
+text-align:center;
+
+/* BACKGROUND IMAGE ADDED */
+background:
+linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+url("https://upload.wikimedia.org/wikipedia/commons/8/8e/Staples_High_School%2C_Westport%2C_CT.jpg");
+
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+margin:0;
+}
+
+@keyframes bgmove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+h2{
+color:white;
+margin-bottom:20px;
+letter-spacing:1px;
+text-shadow:1px 1px 5px rgba(0,0,0,0.3);
+}
+
+form{
+background:white;
+padding:35px;
+width:320px;
+margin:auto;
+border-radius:12px;
+box-shadow:0px 12px 30px rgba(0,0,0,0.25);
+transition:transform 0.3s;
+}
+
+form:hover{
+transform:scale(1.02);
+}
+
+input{
+width:90%;
+padding:10px 10px 10px 35px;
+margin:8px;
+border:1px solid #ccc;
+border-radius:6px;
+outline:none;
+transition:0.3s;
+background:#f9f9f9;
+}
+
+input[type="email"]{
+background-image:url("data:image/svg+xml;utf8,<svg fill='%23999' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M2 4h20v16H2z'/></svg>");
+background-repeat:no-repeat;
+background-position:8px center;
+background-size:16px;
+}
+
+input[type="password"]{
+background-image:url("data:image/svg+xml;utf8,<svg fill='%23999' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 1a5 5 0 00-5 5v3H6a2 2 0 00-2 2v10h16V11a2 2 0 00-2-2h-1V6a5 5 0 00-5-5zm-3 8V6a3 3 0 016 0v3H9z'/></svg>");
+background-repeat:no-repeat;
+background-position:8px center;
+background-size:16px;
+}
+
+input:focus{
+border-color:#4facfe;
+box-shadow:0 0 8px rgba(79,172,254,0.6);
+background:white;
+}
+
+button{
+padding:10px;
+background:linear-gradient(45deg,#28a745,#34d058);
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+width:95%;
+font-weight:bold;
+letter-spacing:0.5px;
+transition:0.3s;
+}
+
+button:hover{
+background:linear-gradient(45deg,#218838,#2ecc71);
+transform:translateY(-2px);
+box-shadow:0 5px 12px rgba(0,0,0,0.3);
+}
+
+a{
+display:inline-block;
+margin-top:15px;
+padding:10px 22px;
+background:white;
+border-radius:25px;
+color:#0077ff;
+font-weight:bold;
+text-decoration:none;
+font-size:14px;
+box-shadow:0 4px 10px rgba(0,0,0,0.25);
+transition:0.3s;
+}
+
+a:hover{
+background:#0077ff;
+color:white;
+transform:translateY(-2px);
+box-shadow:0 6px 14px rgba(0,0,0,0.35);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>Teacher Login</h2>
+
+<form method="POST">
+
+<input type="email" name="email" placeholder="Email">
+
+<input type="password" name="password" placeholder="Password">
+
+<button type="submit">Login</button>
+
+</form>
+
+<a href="/register">Register</a>
+
+</body>
+</html>
