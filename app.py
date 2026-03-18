@@ -1,18 +1,54 @@
 from flask import Flask, render_template, request, redirect, session
 import psycopg2
 from datetime import date
+import os
 
 app = Flask(__name__)
 app.secret_key = "secret123"
 
-
+# ✅ Use Render DATABASE_URL
 def get_db_connection():
-    return psycopg2.connect(
-        host="localhost",
-        database="attendance_db",
-        user="postgres",
-        password="piyush123"
-    )
+    return psycopg2.connect(os.environ.get("DATABASE_URL"))
+
+
+# ✅ Create tables automatically (safe)
+def create_tables():
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS teachers (
+        id SERIAL PRIMARY KEY,
+        name TEXT,
+        email TEXT UNIQUE,
+        password TEXT
+    );
+    """)
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS students (
+        id SERIAL PRIMARY KEY,
+        name TEXT,
+        roll_no INTEGER
+    );
+    """)
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS attendance (
+        id SERIAL PRIMARY KEY,
+        student_id INTEGER,
+        date DATE,
+        status TEXT
+    );
+    """)
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+
+# Run once when app starts
+create_tables()
 
 
 @app.route('/')
@@ -26,24 +62,28 @@ def register():
 
     if request.method == 'POST':
 
-        name = request.form['name']
-        email = request.form['email']
-        password = request.form['password']
+        name = request.form.get('name')
+        email = request.form.get('email')
+        password = request.form.get('password')
 
-        conn = get_db_connection()
-        cur = conn.cursor()
+        try:
+            conn = get_db_connection()
+            cur = conn.cursor()
 
-        cur.execute(
-        "INSERT INTO teachers (name,email,password) VALUES (%s,%s,%s)",
-        (name,email,password)
-        )
+            cur.execute(
+                "INSERT INTO teachers (name,email,password) VALUES (%s,%s,%s)",
+                (name,email,password)
+            )
 
-        conn.commit()
+            conn.commit()
+            cur.close()
+            conn.close()
 
-        cur.close()
-        conn.close()
+            return redirect('/login')
 
-        return redirect('/login')
+        except Exception as e:
+            print(e)
+            return "Error: Email may already exist"
 
     return render_template('register.html')
 
@@ -54,15 +94,15 @@ def login():
 
     if request.method == 'POST':
 
-        email = request.form['email']
-        password = request.form['password']
+        email = request.form.get('email')
+        password = request.form.get('password')
 
         conn = get_db_connection()
         cur = conn.cursor()
 
         cur.execute(
-        "SELECT * FROM teachers WHERE email=%s AND password=%s",
-        (email,password)
+            "SELECT * FROM teachers WHERE email=%s AND password=%s",
+            (email,password)
         )
 
         teacher = cur.fetchone()
@@ -75,6 +115,9 @@ def login():
             session['teacher_name'] = teacher[1]
 
             return redirect('/dashboard')
+
+        else:
+            return "Invalid email or password"
 
     return render_template('login.html')
 
@@ -112,19 +155,18 @@ def dashboard():
 @app.route('/add_student', methods=['POST'])
 def add_student():
 
-    name = request.form['name']
-    roll_no = request.form['roll_no']
+    name = request.form.get('name')
+    roll_no = request.form.get('roll_no')
 
     conn = get_db_connection()
     cur = conn.cursor()
 
     cur.execute(
-    "INSERT INTO students (name,roll_no) VALUES (%s,%s)",
-    (name,roll_no)
+        "INSERT INTO students (name,roll_no) VALUES (%s,%s)",
+        (name,roll_no)
     )
 
     conn.commit()
-
     cur.close()
     conn.close()
 
@@ -142,7 +184,6 @@ def delete_student(student_id):
     cur.execute("DELETE FROM students WHERE id=%s",(student_id,))
 
     conn.commit()
-
     cur.close()
     conn.close()
 
@@ -153,19 +194,18 @@ def delete_student(student_id):
 @app.route('/mark/<int:student_id>', methods=['POST'])
 def mark(student_id):
 
-    status = request.form['status']
-    selected_date = request.form['date']
+    status = request.form.get('status')
+    selected_date = request.form.get('date')
 
     conn = get_db_connection()
     cur = conn.cursor()
 
     cur.execute(
-    "INSERT INTO attendance (student_id,date,status) VALUES (%s,%s,%s)",
-    (student_id,selected_date,status)
+        "INSERT INTO attendance (student_id,date,status) VALUES (%s,%s,%s)",
+        (student_id,selected_date,status)
     )
 
     conn.commit()
-
     cur.close()
     conn.close()
 
@@ -212,8 +252,6 @@ def logout():
     session.clear()
     return redirect('/login')
 
-
-import os
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
